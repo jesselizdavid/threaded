@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threaded - Turning Chaos into Clarity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-deep-teal: #01677b;
+            --color-soft-teal: #1d9ea4;
+            --color-bright-teal: #1bc2d7;
+            --color-forest-teal: #1e7773;
+            --color-warm-coral: #d4a574;
+            --color-accent: #E2733C;
+            --color-cream: #f8f4ef;
+            --color-warm-white: #fdfcfb;
+            --color-charcoal: #2d3142;
+            --color-light-gray: #eef0f2;
+            --font-display: 'Crimson Pro', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-charcoal);
+            background: var(--color-warm-white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 252, 251, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(26, 77, 92, 0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-deep-teal);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-icon circle {
+            transition: stroke 0.3s ease;
+            opacity: 0;
+            animation: fadeInRing 0.6s ease-out 0.2s forwards;
+        }
+
+        .logo-icon .thread-part {
+            transition: stroke 0.3s ease;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        .logo-icon .thread-1 {
+            animation: drawThread 1s ease-out 0.8s forwards;
+        }
+
+        .logo-icon .thread-2 {
+            animation: drawThread 1s ease-out 1.6s forwards;
+        }
+
+        @keyframes fadeInRing {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes drawThread {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .logo-icon circle {
+            transition: stroke 0.3s ease;
+        }
+
+        .logo-icon path {
+            transition: stroke 0.3s ease;
+        }
+
+        .logo:hover .logo-icon circle {
+            stroke: var(--color-bright-teal);
+        }
+
+        .logo:hover .logo-icon path {
+            stroke: var(--color-bright-teal);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-charcoal);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-bright-teal);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-soft-teal);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 8rem 2rem 6rem;
+            background: #F1F5F7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(27, 194, 215, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            left: 5%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(226, 115, 60, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        /* Flowing curved line across hero */
+        .hero-line {
+            position: absolute;
+            bottom: 15%;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hero-line svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-line path {
+            stroke: var(--color-accent);
+            stroke-width: 3;
+            fill: none;
+            opacity: 0;
+            animation: drawLine 2s ease-out 1s forwards;
+        }
+
+        .hero-line text {
+            fill: var(--color-accent);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2.5s forwards;
+        }
+
+        @keyframes drawLine {
+            to {
+                opacity: 0.6;
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-30px, -30px) rotate(2deg); }
+            66% { transform: translate(30px, 30px) rotate(-2deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.2); opacity: 0.25; }
+        }
+
+        .hero .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 600;
+            color: var(--color-deep-teal);
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 .highlight {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: var(--color-accent);
+            opacity: 0.3;
+            z-index: -1;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .hero .subheading {
+            font-size: 1.3rem;
+            color: var(--color-charcoal);
+            font-weight: 400;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            color: var(--color-bright-teal);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--color-charcoal);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--color-soft-teal);
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(27, 194, 215, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(27, 194, 215, 0.4);
+            background: var(--color-bright-teal);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-deep-teal);
+            margin-bottom: 3rem;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        /* What You Get Section */
+        .value-props {
+            background: var(--color-cream);
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--color-soft-teal);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .value-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-deep-teal);
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            color: var(--color-charcoal);
+            line-height: 1.7;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--color-warm-white);
+        }
+
+        .service-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .tier {
+            background: linear-gradient(135deg, #01677b 0%, #1bc2d7 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(1, 103, 123, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tier::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .tier h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+            position: relative;
+        }
+
+        .tier .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .tier ul {
+            list-style: none;
+            position: relative;
+        }
+
+        .tier li {
+            padding: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            opacity: 0.95;
+        }
+
+        .tier li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-warm-coral);
+            font-weight: bold;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: var(--color-light-gray);
+        }
+
+        .project-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .project-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-bright-teal);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+            color: var(--color-charcoal);
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* About Section */
+        .about {
+            background: var(--color-warm-white);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--color-charcoal);
+        }
+
+        .superpower {
+            background: linear-gradient(135deg, #1e7773 0%, #1d9ea4 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 30px rgba(30, 119, 115, 0.2);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--color-cream);
+            text-align: center;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--color-charcoal);
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 3rem auto;
+            text-align: left;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-deep-teal);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid var(--color-light-gray);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-bright-teal);
+            box-shadow: 0 0 0 3px rgba(27, 194, 215, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: var(--color-soft-teal);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(27, 194, 215, 0.3);
+        }
+
+        .submit-button:hover {
+            background: var(--color-bright-teal);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(27, 194, 215, 0.4);
+        }
+
+        .direct-contact {
+            margin-top: 2rem;
+            font-size: 1rem !important;
+        }
+
+        .contact-email-link {
+            color: var(--color-deep-teal);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-bright-teal);
+            transition: color 0.3s ease;
+        }
+
+        .contact-email-link:hover {
+            color: var(--color-soft-teal);
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: var(--color-deep-teal);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 3px solid var(--color-bright-teal);
+            padding-bottom: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-email:hover {
+            color: var(--color-soft-teal);
+            border-bottom-color: var(--color-soft-teal);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-deep-teal);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer p {
+            opacity: 0.9;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .service-tiers,
+            .value-grid,
+            .project-list {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Part 1: Thread going UNDER (drawn first, so it appears behind) -->
+                    <path class="thread-part thread-1" d="M 2 35 Q 10 32, 14 28 Q 18 24, 20 20" 
+                          stroke="#1bc2d7" 
+                          stroke-width="2.5" 
+                          stroke-linecap="round" 
+                          fill="none"/>
+                    
+                    <!-- Circle (drawn on top of the first thread part) -->
+                    <circle cx="20" cy="20" r="13" stroke="#01677b" stroke-width="2.5" fill="none"/>
+                    
+                    <!-- Part 2: Thread going OVER (drawn last, so it appears on top) -->
+                    <path class="thread-part thread-2" d="M 20 20 Q 22 16, 26 12 Q 30 8, 38 5" 
+                          stroke="#1bc2d7" 
+                          stroke-width="2.5" 
+                          stroke-linecap="round" 
+                          fill="none"/>
+                </svg>
+                <span>Threaded</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-line">
+            <svg viewBox="0 0 1200 150" preserveAspectRatio="none">
+                <!-- Curved flowing line with twist -->
+                <path d="M -50 75 Q 200 20, 400 60 Q 600 100, 800 50 Q 1000 0, 1250 75" 
+                      stroke-dasharray="2000" 
+                      stroke-dashoffset="2000"/>
+                <!-- Text along the curve -->
+                <text>
+                    <textPath href="#linePath" startOffset="30%">
+                        connecting the threads • finding clarity • moving forward
+                    </textPath>
+                </text>
+                <path id="linePath" d="M -50 75 Q 200 20, 400 60 Q 600 100, 800 50 Q 1000 0, 1250 75" fill="none" stroke="none"/>
+            </svg>
+        </div>
+        <div class="container">
+            <h1>Clarity You Can <span class="highlight">Act On</span></h1>
+            <p class="subheading">Helping individuals and organizations move forward when the next step is uncertain</p>
+            <p>Understand what's working for you and what's not.</p>
+            <a href="#contact" class="cta-button">Let's Connect</a>
+        </div>
+    </section>
+
+    <section id="services" class="services fade-in-section">
+        <div class="container">
+            <h2>How I Help</h2>
+            <div class="service-tiers">
+                <div class="tier">
+                    <h3>For Organizations</h3>
+                    <p class="subtitle">Strategic HR partnership for startups and scale-ups</p>
+                    <ul>
+                        <li>Compensation strategy</li>
+                        <li>AI workflow implementation</li>
+                        <li>Onboarding programs</li>
+                        <li>HRIS implementation</li>
+                        <li>Leadership workshops</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>For Individuals</h3>
+                    <p class="subtitle">1:1 coaching where I do my best work</p>
+                    <ul>
+                        <li>Manager & executive coaching</li>
+                        <li>Founder support</li>
+                        <li>Career crossroads guidance</li>
+                        <li>Neurodivergent-friendly coaching</li>
+                        <li>IC development</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="value-props fade-in-section">
+        <div class="container">
+            <h2>What You Get</h2>
+            <div class="value-grid">
+                <div class="value-card">
+                    <h3>Control & Predictability</h3>
+                    <p>Discover what matters most so you can make strategic decisions with confidence, not confusion.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Invisible Lines Connected</h3>
+                    <p>I see what's not being said and bring it to light through compassion and keen insight.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Your Best Path Forward</h3>
+                    <p>Whether you're an organization, manager, IC, or solopreneur—I help you find your way through.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects fade-in-section">
+        <div class="container">
+            <h2>Project Expertise</h2>
+            <div class="project-list">
+                <div class="project-item">Compensation Design</div>
+                <div class="project-item">AI Workflows</div>
+                <div class="project-item">Onboarding Programs</div>
+                <div class="project-item">HRIS Implementation</div>
+                <div class="project-item">Leadership Workshops</div>
+                <div class="project-item">1:1 Coaching</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact fade-in-section">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>Let's turn your chaos into clarity together.</p>
+            
+            <form class="contact-form" action="https://formspree.io/f/mykjpnze" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">What brings you here?</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select an option</option>
+                        <option value="organization">Organization Support</option>
+                        <option value="individual">Individual Coaching</option>
+                        <option value="project">HR Project</option>
+                        <option value="other">Just exploring</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Tell me about your situation</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+            
+            <p class="direct-contact">Or email directly: <a href="mailto:jesse@threaded.work" class="contact-email-link">jesse@threaded.work</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Threaded. Turning chaos into clarity, one conversation at a time.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade-in on scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
