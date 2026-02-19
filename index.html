@@ -94,6 +94,60 @@
             animation: drawThread 1s ease-out 1.6s forwards;
         }
 
+        /* About Section */
+.about {
+    background: var(--color-warm-white);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+.about-image {
+    position: relative;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.about-content {
+    text-align: left;
+}
+
+.about-content h3 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--color-deep-teal);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: var(--color-charcoal);
+}
+
+.about-content .tagline-text {
+    font-style: italic;
+    color: var(--color-soft-teal);
+    font-weight: 500;
+    margin-top: 2rem;
+}
+
         @keyframes fadeInRing {
             to {
                 opacity: 1;
@@ -788,6 +842,24 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+    
+            .about-image {
+                order: -1;
+            }
+
+        @media (max-width:768px) {
+            .hero h1 .highlight::after {
+                display: none
+            }
+        }    
+
+}
+
         /* Scroll animations */
         .fade-in-section {
             opacity: 0;
@@ -944,6 +1016,29 @@
                 <div class="project-item">HRIS Implementation</div>
                 <div class="project-item">Leadership Workshops</div>
                 <div class="project-item">1:1 Coaching</div>
+            </div>
+        </div>
+    </section>
+
+        <section id="about" class="about fade-in-section">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="jesse-photo.jpg" alt="Jesse David">
+                </div>
+                <div class="about-content">
+            
+                    <p>Hi, I'm Jesse. I've taken an unconventional path to HR—starting as a teacher, then spending years as a software engineer at startups like Riipen and Borrowell, before finding my calling in people operations.</p>
+                    
+                    <p>Over the last 8+ years, I've helped people and organizations find clarity in complexity. As an HR leader at fast-growing SaaS companies like Loopio, Omnipresent, and Whereby, I've coached 14+ leaders, supported teams of 90+ engineers, and built performance frameworks for 400+ employees.</p>
+                    
+                    <p>But what really drives me isn't just the systems—it's the moments when someone finally sees what's been blocking them and knows exactly what to do next.</p>
+                    
+                    <p>My superpower is connecting the dots others miss. I see what's not being said, read between the lines, and help you find the signal in the noise. Whether you're navigating a career crossroads, scaling your organization, or just need someone who gets it—I'm here to help you move forward with clarity and confidence.</p>
+                    
+                    <p class="tagline-text"></p>
+                </div>
             </div>
         </div>
     </section>
